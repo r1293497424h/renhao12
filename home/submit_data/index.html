@@ -1,0 +1,199 @@
+
+<html>
+
+<head>
+
+<title>新增题目</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script type="text/javascript" src="jquery-2.1.4.min.js"></script>
+
+<script type="text/javascript" src="jquery-form.js"></script>
+
+</head>
+
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+<script type="text/javascript">
+function ajaxsubmit(){
+	
+	$(function(){
+
+		/** 验证文件是否导入成功  */
+
+		$("#testlib").ajaxForm(function(data){  
+
+			var jsonReturn = JSON.parse(data);
+			if(jsonReturn.retcode=="200200"){
+				mystring="&nbsp;&nbsp;<a style=' color:red; font-size:30px;' href='http://exp.szer.me/rh/home/submit_data/index.html'>返回</a></br></br></br></br></br></br></br></br></br></br>";//生成返回的按钮
+				mystring=mystring+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style=' color:red; font-size:50px;'>添加数据成功，该题目的ID为"+jsonReturn.retdata.pid+"</a>";
+				$(document.body).html(mystring);
+				// document.write(jsonReturn.retdata.pid);
+				 //alert("添加成功，添加的题目ID是："+jsonReturn.retdata.pid);
+				 //window.location.reload();
+			 }
+			else
+			 	alert("添加失败");
+
+			
+
+		});     
+
+	});
+
+}
+</script>
+&nbsp;&nbsp;<a style=" color:red; font-size:30px;" href="http://exp.szer.me/rh/home/">返回</a>
+
+<form method="POST" id="testlib" action="http://exp.szer.me/parry/testlib/problem" name="testlib" target="nm_iframe" >
+
+     <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+
+ 
+      <tr>
+		</br>
+          <td height="50">题　　目：<input type="text" id="problem" name="title" size="200" maxlength="500" style="width:920px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;" placeholder="请输入题目"></td>
+        </tr>
+ 
+      <tr>
+
+          <td height="50">题目类型：		  <label id="t1"><input  type="radio" name="pro_type" value="exclusive choice" onclick="javascript:changetype()" checked>单选</label>　		  <label id="t2"><input type="radio" name="pro_type" value="multiple choice" onclick="javascript:changetype()">多选　</label>		  <label id="t3"><input type="radio" name="pro_type" value="exclusive fill" onclick="javascript:changetype()">单项填空</label>　		  <label id="t4"><input type="radio" name="pro_type" value="multiple fill" onclick="javascript:changetype()">多项填空</label>　		  <label id="t5"><input type="radio" name="pro_type" value="short answer" onclick="javascript:changetype()">简答题</label>		</td>
+		   
+		 
+
+       </tr>
+ 
+     
+       
+	
+      <tr>
+	  
+
+          <td height="50"> <div id="if_option">选项数量：<input type="text" name="option_num" id="option_num" value="4" OnChange="change_answernum();"></div></br><div id="optionstring">选项内容a：<input type="text" name="optionAr[a]" value=""size="200" maxlength="500" style="width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;">　</br></br>选项内容b：<input type="text" name="optionAr[b]" value=""size="200" maxlength="500" style="width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;"></br></br>
+选项内容c：<input type="text" name="optionAr[c]" value=""size="200" maxlength="500" style="width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;">　</br></br>选项内容d：<input type="text" name="optionAr[d]" value=""size="200" maxlength="500" style="width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;"></br></br>
+</div>
+
+<div id="ans_num">答案数量：<input type="text" name="ans_num" id="ans_num" value="2" OnChange="change_answernum();"></div></br>
+
+<div id="ans">答　　案：<input type="text" name="answers[0]"  value=""size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'></div></br></td>
+       </tr>
+ 
+      <tr>
+
+          <td height="50">提　　示：<input type="text" name="hint" id="hint" value=""size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'></td>
+       </tr>
+ 
+      <tr>
+
+          <td height="50">IQ题类目：<input type="text" name="classification" id="classification" value=""></td>
+       </tr>
+ 
+      <tr>
+
+          <td height="50">语言类别：<label id="l1"><input type="radio" name="language" value="multi">中英文</label>　		  <label id="l2">　<input type="radio" name="language" value="zh" >中文</label>　		  <label id="l3">　<input type="radio" name="language" value="en" checked>英文</label>　		  <label id="l4">　<input type="radio" name="language" value="all">其他</label></td>
+       </tr>
+ 
+      <tr>
+
+          <td height="50">题目来源的xml文件名<input type="text" name="pro_source" id="pro_source" value=" logic-diagram "></td>
+       </tr>
+ 
+      <tr>
+
+          <td height="50"><input type="submit" value=" 提   交 " name="" onclick=" ajaxsubmit(); " style="line-height:19px;  font-size:14px"></td>
+		  
+       </tr>
+    
+     </table>
+
+	
+
+
+<script type="text/javascript">
+function show_ans_num(){
+	var num = getprotype();
+	$("#ans_num").hide();
+}
+show_ans_num();
+function getprotype(){
+   var x=document.getElementsByName("pro_type");
+   for(i=0;i<=4;i++)
+   	if(x[i].checked) num=i;
+   return num;
+}
+function changetype(){
+   var num =getprotype();
+   //document.testlib.optionAr.value="";
+   //$("optionAr[a]").val("");var
+   //optsring="选项内容a：<input type='text' name='optionAr[]' value=''size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'>";
+   optsring="选项内容a：<input type='text'  value=''size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'>";
+	$("#optionstring").html(optsring+"<br><br>");
+   if(num == 4)document.testlib.option_num.value="0";
+   else if(num == 2)document.testlib.option_num.value="1";
+   else document.testlib.option_num.value="4";
+
+   change_answernum();
+   if(num >=2)$("#optionstring").hide();
+   else $("#optionstring").show();
+	if(num==1)  $("#ans_num").show();
+   else $("#ans_num").hide();
+   if(num==2||num==4){
+		$("#if_option").hide();
+   }
+   else if(num==3){
+		 $("#if_option").hide();
+	     $("#ans_num").show();
+   }else $("#if_option").show();
+}
+
+function change_answernum(){
+	var ans_type=getprotype();
+	var ans_string="答　　案：<input type='text' name='answers[0]'  value=''size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'> <br/><br/>";
+	if(ans_type==3){
+		ans_num=document.testlib.ans_num.value;
+		for(i=1;i<ans_num;i++){
+			
+			ans_string=ans_string  + "答　案 " +(i+1) +"：<input type='text' name='answers["+i+"]'  value=''size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'><br/><br/>";
+		}
+	}else if(ans_type==0){
+		var optsring="选项内容a：<input type='text' name='optionAr[a]' value=''size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'>";
+		var optindex=["a","b","c","d","e","f","g","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+		ans_num=document.testlib.option_num.value;
+		for(i=2;i<=ans_num;i++){
+			optsring=optsring + "<br/><br/>";
+			
+			optsring=optsring  + "选项内容" + optindex[i-1] +"：<input type='text' name='optionAr[" + optindex[i-1] + "]' value=''size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'>";
+		}
+	}else if(ans_type==1){
+		var optsring="选项内容a：<input type='text' name='optionAr[a]' value=''size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'>";
+		var optindex=["a","b","c","d","e","f","g","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+		ans_num=document.testlib.option_num.value;
+		for(i=2;i<=ans_num;i++){
+			optsring=optsring + "<br/><br/>";
+			
+			optsring=optsring  + "选项内容" + optindex[i-1] +"：<input type='text' name='optionAr[" + optindex[i-1] + "]' value=''size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'>";
+		}
+		ans_num=document.testlib.ans_num.value;
+		for(i=1;i<ans_num;i++){
+			
+			ans_string=ans_string  + "答　案 " +(i+1) +"：<input type='text' name='answers["+i+"]'  value=''size='200' maxlength='500' style='width:520px; height:50px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;'><br/><br/>";
+		}
+	}
+	$("#ans").html(ans_string);
+	if(ans_type<=1){
+		$("#optionstring").html(optsring+"<br><br>");
+	}
+}
+
+
+</script>
+</form>
+
+<iframe id="id_iframe"  name="nm_iframe" align="top" frameborder="0" width="0px" height="0px" scrolling="auto"  ></iframe> 
+
+</body>
+
+</html>
+

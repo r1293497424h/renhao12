@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="jquery-2.1.4.min.js"></script>
+</head>
+<body>
+&nbsp;&nbsp;<a style=" color:red; font-size:30px;" href="http://exp.szer.me/rh/home/">返回</a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+	<tr>
+
+         <td height="50">请输入要搜索的信息：<input type="text" value="" id="info" name="pid"size="200" maxlength="500" style="width:220px; height:30px; vertical-align:middle; border:1px solid #ccc; padding:0 10px; line-height:38px; font-size:16px;">
+		 </td>
+    </tr>
+	<tr>
+
+          <td height="50"><input type="submit" value="提 交" id="submit" name="" onclick="search_data();"  style="line-height:19px; font-size:14px">
+		  </td>
+
+    </tr>
+ </table>
+<div id="contentpage" style="display:none"></div>
+<script type="text/javascript">
+function search_data(){
+
+	$(document).ready(function(){
+		var myurl="http://exp.szer.me/parry/testlib/problem/search/?word="+document.getElementById("info").value;
+  
+		$.get(myurl,function(data,status){
+			var jsonReturn = JSON.parse(data);
+			var pagestring="";
+			for(i=0;i<jsonReturn.retdata.brief_problems.length;i++){
+				pagestring=pagestring +"<tr><td>题目id:</td><td colspan='3'>"+jsonReturn.retdata.brief_problems[i].pid+"</td></tr>";
+				pagestring=pagestring +"<tr><td>题目：</td><td colspan='3'>"+jsonReturn.retdata.brief_problems[i].title+"</td></tr>";
+				if(jsonReturn.retdata.brief_problems[i].title_pic!=null)
+				pagestring=pagestring +"<tr><td>题目图片：</td><td colspan='3'><img src="+jsonReturn.retdata.brief_problems[i].title_pic+" /></td></tr>";
+				pagestring=pagestring +"<tr><td>pro_type:</td><td>"+jsonReturn.retdata.brief_problems[i].pro_type+"</td><td>题目类型：</td><td>"+jsonReturn.retdata.brief_problems[i].classification+"</td></tr>";
+				pagestring=pagestring +"<tr><td>题目来源:</td><td>"+jsonReturn.retdata.brief_problems[i].pro_source+"</td><td>评论次数：</td><td>"+jsonReturn.retdata.brief_problems[i].comment_num+"</td></tr>";
+
+
+			var contenttablehead="<table border='1'width='1000px'height='200px'bordercolor='pink'cellspacing='0'cellpadding='10px'>";
+			var contenttablefoot="</table>";
+			$("#contentpage").append(pagestring);
+			$("#contentpage").show();
+			$("#contentpage").html(contenttablehead +pagestring +contenttablefoot);
+
+			}
+		 
+		 });
+  
+	});
+}
+</script>
+</body>
+</html>

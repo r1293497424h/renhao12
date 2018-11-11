@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+		
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<script src="jquery-2.1.4.min.js"></script>
+
+	<script  src="getUrlParam.js"></script>
+</head>
+<body>
+
+&nbsp;&nbsp;<a style=" color:red; font-size:30px;" href="http://exp.szer.me/rh/home/show_all/index.html">返回</a>
+<h1 align="center">删除</h1>
+<a>该数据的具体信息如下</a>
+<div id="contentpage" style="display:none"></div>
+<script type="text/javascript">
+
+    var mypid = UrlParam.paramValues("id");
+
+	var myurl="http://exp.szer.me/parry/testlib/problem/"+mypid;
+	$(document).ready(function(){
+ 
+		$.get(myurl,function(data,status){
+      
+		var jsonReturn = JSON.parse(data);
+		var pagestring="";
+		pagestring=pagestring +"<tr><td>题目id:</td><td>"+jsonReturn.retdata.problem.pid+"</td><td>语言：</td><td>"+jsonReturn.retdata.problem.language+"</td></tr>";
+		pagestring=pagestring +"<tr><td>最后一次编辑时间:</td><td>"+jsonReturn.retdata.problem.edit_time+"</td><td>编辑次数：</td><td>"+jsonReturn.retdata.problem.total_edit+"</td></tr>";
+		pagestring=pagestring +"<tr><td>pro_type：</td><td>"+jsonReturn.retdata.problem.por_type+"</td><td>题目来源为：</td><td>"+jsonReturn.retdata.problem.pro_source+"</td></tr>";
+		pagestring=pagestring +"<tr><td>题目：</td><td colspan='3'>"+jsonReturn.retdata.problem.title+"</td></tr>";
+		if(jsonReturn.retdata.problem.title_pic!=null)
+		pagestring=pagestring +"<tr><td>题目图片：</td><td colspan='3'><img src="+jsonReturn.retdata.problem.title_pic+" /></td></tr>";
+		
+		if(jsonReturn.retdata.problem.optionAr[0]){
+
+			if(jsonReturn.retdata.problem.optionAr[0].is_pic=="1"){
+
+				for(i=0;i<jsonReturn.retdata.problem.optionAr.length;i++){
+
+					pagestring=pagestring +"<tr><td>选项名：</td><td colspan='3'>"+jsonReturn.retdata.problem.optionAr[i].key+"</td></tr>";
+
+					pagestring=pagestring +"<tr><td>选项内容:</td><td colspan='3'><img src="+jsonReturn.retdata.problem.optionAr[i].content+" /></td></tr>";
+
+				}
+
+		
+
+			}
+
+			else{
+
+				for(i=0;i<jsonReturn.retdata.problem.optionAr.length;i++){
+
+					pagestring=pagestring +"<tr><td>选项名：</td><td colspan='3'>"+jsonReturn.retdata.problem.optionAr[i].key+"</td></tr>";
+
+					pagestring=pagestring +"<tr><td>选项内容:</td><td colspan='3'>"+jsonReturn.retdata.problem.optionAr[i].content+"</td></tr>";
+
+				}
+
+			
+	
+			}
+
+		}else{
+			pagestring;
+		}
+		
+		pagestring=pagestring +"<tr><td>提示：</td><td colspan='3'>"+jsonReturn.retdata.problem.hint+"</td></tr>";
+		pagestring=pagestring +"<tr><td>答案：</td><td colspan='3'>"+jsonReturn.retdata.problem.answers+"</td></tr>";
+		for(j=0;j<jsonReturn.retdata.problem.comments.length;j++){
+			
+			pagestring=pagestring +"<tr><td>评论的内容"+(j+1)+":</td><td>"+jsonReturn.retdata.problem.comments[j].comment+"</td><td>评论的时间：</td><td>"+jsonReturn.retdata.problem.comments[j].time+"</td></tr>";
+		}
+
+
+
+		var contenttablehead="<table border='1'width='1000px'height='200px'bordercolor='pink'cellspacing='0'cellpadding='10px'>";
+		var contenttablefoot="</table>";
+		$("#contentpage").append(pagestring);
+		$("#contentpage").show();
+		$("#contentpage").html(contenttablehead +pagestring +contenttablefoot);
+		});
+	});
+</script>	
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+	
+	<tr>
+
+          <td height="50"><input type="submit" value="删除数据" id="submit" name="" onclick="deletedata();"  style="line-height:19px; font-size:14px">
+		  </td>
+
+    </tr>
+ </table>
+
+<script type="text/javascript">
+function deletedata(){
+
+	var r=confirm("确定删除？");
+
+
+	var mypid = UrlParam.paramValues("id");
+
+	if(r==true){
+		$(document).ready(function(){
+			var myurl="http://exp.szer.me/parry/testlib/problem/delete/"+mypid;
+  
+			$.post(myurl,function(data,status){
+			var jsonReturn = JSON.parse(data);
+			if(jsonReturn.retcode=="200200"){
+				alert(jsonReturn.retmsg);
+				window.location.reload();
+			}
+			else
+		 		alert("删除失败，可能不存在该题目id");
+			});
+  
+		});
+		}
+	else
+	{
+		alert("删除失败!");
+	}
+}
+</script>
+</body>
+</html>

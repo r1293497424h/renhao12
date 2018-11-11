@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="jquery-2.1.4.min.js"></script>
+
+<script  src="getUrlParam.js"></script>
+
+</head>
+<body>
+&nbsp;&nbsp;<a style=" color:red; font-size:30px;" href="http://exp.szer.me/rh/home/display_comment/index.html">返回</a>
+<div id="contentpage" style="display:none"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+	
+	<tr>
+		 请输入评论：<textarea rows="10" cols="100" maxlength="1000" placeholder="请输入您的评论!" value="" id="comment" style="vertical-align: top;"></textarea><br/><br/>
+
+		 </td>
+    </tr>
+	<tr>
+
+          <td height="50"><input type="submit" value="提 交"  id="submit" name="" onclick="submit_comment();"  style="line-height:19px; font-size:14px">
+		  </td>
+
+    </tr>
+</table>
+<script type="text/javascript">
+
+getmyurl();
+function getmyurl(){
+	var mypid = UrlParam.paramValues("id");
+	var myurl="http://exp.szer.me/parry/testlib/problem/"+mypid;
+	$(document).ready(function(){
+ 
+		$.get(myurl,function(data,status){
+      
+		var jsonReturn = JSON.parse(data);
+		var pagestring="";
+		pagestring=pagestring +"<tr><td>题目id:</td><td>"+jsonReturn.retdata.problem.pid+"</td><td>语言：</td><td>"+jsonReturn.retdata.problem.language+"</td></tr>";
+		pagestring=pagestring +"<tr><td>最后一次编辑时间:</td><td>"+jsonReturn.retdata.problem.edit_time+"</td><td>编辑次数：</td><td>"+jsonReturn.retdata.problem.total_edit+"</td></tr>";
+		pagestring=pagestring +"<tr><td>pro_type：</td><td>"+jsonReturn.retdata.problem.por_type+"</td><td>题目来源为：</td><td>"+jsonReturn.retdata.problem.pro_source+"</td></tr>";
+		pagestring=pagestring +"<tr><td>题目：</td><td colspan='3'>"+jsonReturn.retdata.problem.title+"</td></tr>";
+		pagestring=pagestring +"<tr><td>题目图片：</td><td colspan='3'><img src="+jsonReturn.retdata.problem.title_pic+" /></td></tr>";
+		if(jsonReturn.retdata.problem.optionAr[0].is_pic=="1"){
+			for(i=0;i<jsonReturn.retdata.problem.optionAr.length;i++){
+				pagestring=pagestring +"<tr><td>选项名：</td><td colspan='3'>"+jsonReturn.retdata.problem.optionAr[i].key+"</td></tr>";
+				pagestring=pagestring +"<tr><td>选项内容:</td><td colspan='3'><img src="+jsonReturn.retdata.problem.optionAr[i].content+" /></td></tr>";
+			}
+		
+		}
+		else{
+			for(i=0;i<jsonReturn.retdata.problem.optionAr.length;i++){
+				pagestring=pagestring +"<tr><td>选项名：</td><td colspan='3'>"+jsonReturn.retdata.problem.optionAr[i].key+"</td></tr>";
+				pagestring=pagestring +"<tr><td>选项内容:</td><td colspan='3'>"+jsonReturn.retdata.problem.optionAr[i].content+"</td></tr>";
+			}
+			
+		}
+		
+		pagestring=pagestring +"<tr><td>提示：</td><td colspan='3'>"+jsonReturn.retdata.problem.hint+"</td></tr>";
+		pagestring=pagestring +"<tr><td>答案：</td><td colspan='3'>"+jsonReturn.retdata.problem.answers+"</td></tr>";
+		for(j=0;j<jsonReturn.retdata.problem.comments.length;j++){
+			
+			pagestring=pagestring +"<tr><td>评论的内容"+(j+1)+":</td><td>"+jsonReturn.retdata.problem.comments[j].comment+"</td><td>评论的时间：</td><td>"+jsonReturn.retdata.problem.comments[j].time+"</td></tr>";
+		}
+
+
+
+		var contenttablehead="<table border='1'width='1000px'height='200px'bordercolor='pink'cellspacing='0'cellpadding='10px'>";
+		var contenttablefoot="</table>";
+		$("#contentpage").append(pagestring);
+		$("#contentpage").show();
+		$("#contentpage").html(contenttablehead +pagestring +contenttablefoot);
+		});
+	});
+	
+}
+
+	
+	
+	function submit_comment(){
+		var mypid = UrlParam.paramValues("id");
+		var myurl2="http://exp.szer.me/parry/testlib/problem/comment/"+mypid;
+		var mycomment=document.getElementById("comment").value;
+		$(document).ready(function(){
+			$.post(myurl2,
+			 {
+
+				 comment:mycomment
+				 
+			},
+			function(data,status){
+				alert(status);
+				window.location.reload();
+			});
+
+
+		});
+	}
+</script>
+
+
+
+<script type="text/javascript">
+	
+
+</script>
+
+</body>
+
+</html>

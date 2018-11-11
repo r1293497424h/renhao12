@@ -1,0 +1,100 @@
+
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="jquery-2.1.4.min.js"></script>
+</head>
+<body>
+&nbsp;&nbsp;<a style=" color:red; font-size:30px;" href="http://exp.szer.me/rh/home/">返回</a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+   <tr>
+       <td height="50">请选择想要查询的题目类型（all代表任何类型）：<label id="t1"><input type="radio" name="pro_type" value="all"  checked>all</label><label id="t2"><input type="radio" name="pro_type" value="diagram" >diagram</label>		  <label id="t3"><input type="radio" name="pro_type" value="logic-C" >logic-C</label>		  <label id="t4"><input type="radio" name="pro_type" value="logic-E" >logic-E</label>		  <label id="t5"><input type="radio" name="pro_type" value="seq" >seq</label>		  <label id="t6"><input type="radio" name="pro_type" value="verbal-C" >verbal-C</label>		  <label id="t7"><input type="radio" name="pro_type" value="verbal-CE" >verbal-CE</label>		  <label id="t8"><input type="radio" name="pro_type" value="verbal-E" >verbal-E</label>		  </td>
+   </tr>
+   <tr>
+       <td height="50" align="center"><input type="button" value=" 查  询 " id="submit" name="" onclick="return gettype();"  style="line-height:19px; font-size:14px"></td>
+   </tr>
+</table>
+
+<div id="contentpage" style="display:none"></div>
+<input type="hidden" id="nxturl" name="nxturl">
+<script type="text/javascript">
+function getcontent(myurl){
+	//设置表头和表末尾
+	var contenttablehead="<table width='100%' border='1px' cellspacing='0px' style='border-collapse:collapse'><tr><td width='5%'>id</td><td width='35%'>title</td><td width='20%'>题目图片</td><td width='5%'>classification</td><td width='10%'>题型</td><td width='5%'>题目来源</td><td width='5%'>评论</td><td width='15%' colspan='3'>操作</td>";
+	var contenttablefoot="</table>";
+
+	var pagestring="";
+	$.get(myurl,function(data,status){
+		var jsonReturn = JSON.parse(data);
+		if(jsonReturn.retdata.brief_problems.length>=30){
+			for(i=0;i<30;i++){
+				pagestring=pagestring +"<tr><td height='100'>" + jsonReturn.retdata.brief_problems[i].pid + "</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].title + "</td>";
+				if(jsonReturn.retdata.brief_problems[i].title_pic !=null) 
+			pagestring=pagestring +"<td height='100' ><img widht='400'  height='80' src="+jsonReturn.retdata.brief_problems[i].title_pic+" /></td>";
+			else
+			pagestring=pagestring +"<td  height='100'>无图</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].classification + "</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].pro_type + "</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].pro_source + "</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].comment_num + "</td>\n";
+				pagestring=pagestring +"<td height='100'><a href='mymodify.html?id="+ jsonReturn.retdata.brief_problems[i].pid +"'>modify</a></td>";
+				pagestring=pagestring +"<td height='100'><a href='mydelete.html?id="+ jsonReturn.retdata.brief_problems[i].pid +"'>delete</a></td>";
+				pagestring=pagestring +"<td height='100'><a href='add_comment.html?id="+ jsonReturn.retdata.brief_problems[i].pid +"'>comment</a></td></tr>\n";
+			}
+		}
+		else{
+			for(i=0;i<jsonReturn.retdata.brief_problems.length;i++){
+				pagestring=pagestring +"<tr><td height='100'>" + jsonReturn.retdata.brief_problems[i].pid + "</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].title + "</td>";
+				if(jsonReturn.retdata.brief_problems[i].title_pic !=null) 
+			pagestring=pagestring +"<td height='100' ><img widht='400'  height='80' src="+jsonReturn.retdata.brief_problems[i].title_pic+" /></td>";
+			else
+			pagestring=pagestring +"<td  height='100'>无图</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].classification + "</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].pro_type + "</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].pro_source + "</td>";
+				pagestring=pagestring +"<td height='100'>" + jsonReturn.retdata.brief_problems[i].comment_num + "</td>\n";
+				pagestring=pagestring +"<td height='100'><a href='mymodify.html?id="+ jsonReturn.retdata.brief_problems[i].pid +"'>modify</a></td>";
+				pagestring=pagestring +"<td height='100'><a href='mydelete.html?id="+ jsonReturn.retdata.brief_problems[i].pid +"'>delete</a></td>";
+				pagestring=pagestring +"<td height='100'><a href='add_comment.html?id="+ jsonReturn.retdata.brief_problems[i].pid +"'>comment</a></td></tr>\n";
+			}
+		}
+		$("#contentpage").show();
+		$("#contentpage").append(contenttablehead +pagestring +contenttablefoot);
+	         $("#contentpage").append(contenttablefoot);
+		$("#nxturl").val("http://exp.szer.me"+jsonReturn.retdata.page.next);
+	});
+}
+
+function gettype(){
+	$("#contentpage").html("");   //初始化页面
+	var num;
+	var x=document.getElementsByName("pro_type");      //获取选项值
+	for(i=0;i<=7;i++)
+		if(x[i].checked) num=i;
+	var info=["all","diagram","logic-C","logic-E","seq","verbal-C","verbal-CE","verbal-E"];
+	var url="http://exp.szer.me/parry/testlib/problem?source="+info[num];
+	getcontent(url);
+}
+
+gettype();//默认显示全部内容
+
+
+$(window).scroll(function(){ //触发滚动条事件
+	var totalheight = parseFloat($(document).height()) + parseFloat($(this).scrollTop());
+	if(window.compurl!=$("#nxturl").val() && $(this).height() <= totalheight)	getcontent($("#nxturl").val());
+	window.compurl=$("#nxturl").val();
+});
+
+
+
+
+</script>
+
+</body>
+
+</html>
+
